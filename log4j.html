@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shCore.css">  
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shThemeDefault.css">  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJava.js"></script> 
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJScript.js"></script> 
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushXml.js"></script> 
+
+<script type="text/javascript" src="common/jquery.min.js"></script>   
+
+</head>
+<body>
+<pre class="brush:html:nocontrols:nogutter">
+使用maven引入log4j 2核心包
+<!-- log4j 2 -->
+<dependency>
+<groupId>org.apache.logging.log4j</groupId>
+<artifactId>log4j-api</artifactId>
+<version>2.10.0</version>
+</dependency>
+<dependency>
+<groupId>org.apache.logging.log4j</groupId>
+<artifactId>log4j-core</artifactId>
+<version>2.10.0</version>
+</dependency>
+</pre>
+<pre class="brush:xml:nocontrols:nogutter">
+配置log4j2.xml 在src源路径下
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- monitorInterval="30" 每过30秒检测一次配置文件的变化并使用新配置 -->  
+<Configuration status="WARN" monitorInterval="30">  
+  <Appenders>  
+    <Console name="Console" target="SYSTEM_OUT">  
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>  
+    </Console>
+    <File name="File" fileName="logs/Test01.log">  
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>  
+    </File>
+     <!--RollingFile 文件超过1kb 将被压缩 最大压缩10个包-->  
+    <RollingFile name="RollingFile" fileName="logs/Test.log"  
+                 filePattern="logs/$${date:yyyy-MM}/Test-%d{MM-dd-yyyy}-%i.log.gz">  
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>  
+      <Policies>  
+        <TimeBasedTriggeringPolicy />  
+        <SizeBasedTriggeringPolicy size="1 KB"/>  
+      </Policies>  
+      <DefaultRolloverStrategy max="10"/>  
+    </RollingFile>   
+  </Appenders>  
+  <Loggers>
+    <!-- 指定某个类的输出级别  additivity="false"防止日志输出两次=禁用root looger-->  
+  	<Logger name="log4j2.Test" level="trace" additivity="false">  
+        <AppenderRef ref="Console"/>  
+    </Logger>  
+    <Root level="trace">  
+      <AppenderRef ref="Console"/>
+      <AppenderRef ref="File"/>  
+    </Root>  
+  </Loggers>  
+</Configuration>
+</pre>
+<pre class="brush:java:nocontrols:nogutter">
+
+java类中调用
+public class Test {
+	
+	private static Logger logger = LogManager.getLogger(Test.class);
+	
+	public static void main(String[] args) {
+		logger.trace("trace");  
+        logger.debug("debug");  
+        logger.info("hello");  
+        logger.warn("warn");  
+        logger.error("error");  
+        logger.fatal("fatal");  
+	}
+}
+</pre>
+</body>
+<script type="text/javascript">  
+    SyntaxHighlighter.all();  
+</script
+</html>

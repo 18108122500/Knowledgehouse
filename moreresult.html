@@ -1,0 +1,155 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shCore.css">  
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shThemeDefault.css">  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJava.js"></script> 
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJScript.js"></script> 
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushXml.js"></script> 
+
+<script type="text/javascript" src="common/jquery.min.js"></script>   
+
+</head>
+<body>
+<pre class="brush:java:nocontrols:nogutter">
+	public static ConnectionInFo getData(File file,ConnectionInFo connectionInFo) throws ClassNotFoundException {
+		String fileName = connectionInFo.getResoureId()+".xlsx";
+		String sql = connectionInFo.getSql();
+		String realSql = replaceParam(sql,connectionInFo);
+		List<String> sqList =  FileUtil.getSqlList(realSql);
+		Map<String, Integer> countMap = connectionInFo.getOtherCountMap();
+		List<ResultInfo> infoList = new ArrayList<>();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		int totalRowCount = 0;
+		String dSource = connectionInFo.getDataSource().trim();
+		for(String dString : countMap.keySet()){
+			if(dSource.equals("SYBASE")){
+				if(dString.startsWith("SYBASE")){
+					Class.forName("com.sybase.jdbc4.jdbc.SybDriver") ;	
+				}else{
+					continue;	
+				}
+			}else{
+				if(dString.startsWith("SYBASE")){
+					continue;	
+				}else{
+					Class.forName("com.mysql.jdbc.Driver") ;
+					
+				}
+			}
+			boolean result = true;
+			int dsCount = 0;
+			StringBuffer errorMsg = new StringBuffer();
+			String dataSource = dString.replace("-ROW-CNT", "");
+			
+			List<ResultInfo> resultInfos = new ArrayList<>();
+			DbConnection dbConnection = FileUtil.getConectionByName(file,dataSource);
+			if(dbConnection != null){
+				ResultInfo resultInfo = new ResultInfo();
+				resultInfo.setSql(realSql);
+				resultInfo.setDataSource(dataSource);
+				resultInfo.setDateFrom(connectionInFo.getDateFrom());
+				resultInfo.setDateTo(connectionInFo.getDateTo());
+				resultInfo.setResourceId(connectionInFo.getResoureId());
+				Connection con = null;
+				ResultSet resultSet = null;
+				try{ 
+					con =   DriverManager.getConnection(dbConnection.createConnection(),dbConnection.getUser(),dbConnection.getPassword()) ;
+					if(con != null){
+						for(String thisSql : sqList){
+							boolean haveNext = true;
+							PreparedStatement pstmt = con.prepareStatement(thisSql) ;
+							resultInfo.setRunDate(format.format(new Date()));
+							pstmt.execute();
+							while(haveNext){
+								ResultInfo rInfo = new ResultInfo();
+								List<List<String>> resultList = new ArrayList<>();
+								List<String> headList = new ArrayList<>();
+								resultSet = pstmt.getResultSet();
+								if(resultSet != null){
+									ResultSetMetaData m =resultSet.getMetaData();//获取数据
+									int columns=m.getColumnCount();//获取列数
+								  
+								    for(int i=1;i<=columns;i++){
+								    	if(headList.size() < columns){
+								    		headList.add(m.getColumnName(i));
+								    	}
+								    }
+								 
+								    while(resultSet.next()){
+								    	List<String> perList = new ArrayList<>();
+									    for(int i=1;i<=columns;i++){
+									    	perList.add(resultSet.getString(i));
+									    }
+									    resultList.add(perList);
+								    }
+								}
+								rInfo.setCloumnList(headList);
+								rInfo.setContentList(resultList);
+								rInfo.setCountNum(resultList.size());
+								totalRowCount +=  resultList.size();
+								dsCount +=  resultList.size();
+							    countMap.put(dString, dsCount);
+							    
+							    haveNext = pstmt.getMoreResults();//获取下一个结果集
+							    resultInfos.add(rInfo);
+							}
+							
+						}
+					}else{
+						result = false;
+						errorMsg.append(" the "+connectionInFo.getRowNumber()+" row of excel ,"+dataSource + " can not use");
+					}
+					
+				}catch(SQLException se){  
+					result = false;
+					se.printStackTrace();
+					errorMsg.append(se.getMessage());
+			    }finally {
+			    	if(resultSet !=null){
+			    		try {
+							resultSet.close();
+						} catch (SQLException e) {
+							result = false;
+							errorMsg.append("resultset close error");
+						}
+			    	}
+			    	if(con != null){
+			    		try {
+							con.close();
+						} catch (SQLException e) {
+							result = false;
+							errorMsg.append("connection close error");
+						}
+			    	}
+				}   
+				
+				resultInfo.setCountNum(dsCount);
+				resultInfo.setExcuteFlag(result);
+				resultInfo.setErrorMsg(errorMsg.toString());
+				resultInfo.setResultInfos(resultInfos);
+				infoList.add(resultInfo);
+			}else{
+				System.out.println("the "+connectionInFo.getRowNumber()+" row of excel ,"+dataSource + " is not found");
+			}
+			
+		}
+		
+		boolean writeTxtResult = FileUtil.createResultTxt(fileName,infoList,realSql);
+		if(!writeTxtResult){
+			System.out.println("txt result create or rewrite failed");
+		}
+		
+		connectionInFo.setRunDate(format.format(new Date()));
+		countMap.put("TOTAL-ROW-CNT", totalRowCount);
+		connectionInFo.setOtherCountMap(countMap);
+		return connectionInFo;
+	}
+</pre>
+</body>
+<script type="text/javascript">  
+    SyntaxHighlighter.all();  
+</script
+</html>

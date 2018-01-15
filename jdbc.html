@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <title>知识点快速查询</title>
+  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+</head>
+<body>
+public static ConnectionInFo getData(File file,ConnectionInFo connectionInFo) throws ClassNotFoundException {<br />
+&nbsp;&nbsp;String fileName = connectionInFo.getResoureId()+".xlsx";<br />
+&nbsp;&nbsp;String sql = connectionInFo.getSql();<br />
+&nbsp;&nbsp;String realSql = replaceParam(sql,connectionInFo);<br />
+&nbsp;&nbsp;List<String> sqList =  FileUtil.getSqlList(realSql);<br />
+&nbsp;&nbsp;Map<String, Integer> countMap = connectionInFo.getOtherCountMap();<br />
+&nbsp;&nbsp;List<ResultInfo> infoList = new ArrayList<>();<br />
+&nbsp;&nbsp;SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");<br />
+&nbsp;&nbsp;int totalRowCount = 0;<br />
+&nbsp;&nbsp;String dSource = connectionInFo.getDataSource().trim();<br />
+&nbsp;&nbsp;for(String dString : countMap.keySet()){<br />
+&nbsp;&nbsp;&nbsp;if(dSource.equals("SYBASE")){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(dString.startsWith("SYBASE")){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Class.forName("com.sybase.jdbc4.jdbc.SybDriver") ;<br />&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;}else{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;<br />&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;}else{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(dString.startsWith("SYBASE")){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;<br />&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;}else{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Class.forName("com.mysql.jdbc.Driver") ;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;boolean result = true;<br />
+&nbsp;&nbsp;&nbsp;int dsCount = 0;<br />
+&nbsp;&nbsp;&nbsp;StringBuffer errorMsg = new StringBuffer();<br />
+&nbsp;&nbsp;&nbsp;String dataSource = dString.replace("-ROW-CNT", "");<br />
+&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;List<ResultInfo> resultInfos = new ArrayList<>();<br />
+&nbsp;&nbsp;&nbsp;DbConnection dbConnection = FileUtil.getConectionByName(file,dataSource);<br />
+&nbsp;&nbsp;&nbsp;if(dbConnection != null){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ResultInfo resultInfo = new ResultInfo();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;resultInfo.setSql(realSql);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;resultInfo.setDataSource(dataSource);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;resultInfo.setDateFrom(connectionInFo.getDateFrom());<br />
+&nbsp;&nbsp;&nbsp;&nbsp;resultInfo.setDateTo(connectionInFo.getDateTo());<br />
+&nbsp;&nbsp;&nbsp;&nbsp;resultInfo.setResourceId(connectionInFo.getResoureId());<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Connection con = null;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ResultSet resultSet = null;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;try{<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;con =   DriverManager.getConnection(dbConnection.createConnection(),dbConnection.getUser(),dbConnection.getPassword()) ;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(con != null){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(String thisSql : sqList){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;boolean haveNext = true;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PreparedStatement pstmt = con.prepareStatement(thisSql) ;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resultInfo.setRunDate(format.format(new Date()));<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pstmt.execute();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while(haveNext){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ResultInfo rInfo = new ResultInfo();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;List<List<String>> resultList = new ArrayList<>();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;List<String> headList = new ArrayList<>();<br />
+<span style="color:red;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resultSet = pstmt.getResultSet();<br /></span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(resultSet != null){<br />
+<span style="color:red;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ResultSetMetaData m =resultSet.getMetaData();<br /></span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int columns=m.getColumnCount();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    for(int i=1;i<=columns;i++){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    &nbsp;if(headList.size() < columns){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    &nbsp;&nbsp;headList.add(m.getColumnName(i));<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    &nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    while(resultSet.next()){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    &nbsp;List<String> perList = new ArrayList<>();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    for(int i=1;i<=columns;i++){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    &nbsp;perList.add(resultSet.getString(i));<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    resultList.add(perList);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rInfo.setCloumnList(headList);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rInfo.setContentList(resultList);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rInfo.setCountNum(resultList.size());<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;totalRowCount +=  resultList.size();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dsCount +=  resultList.size();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    countMap.put(dString, dsCount);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    haveNext = pstmt.getMoreResults();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    resultInfos.add(rInfo);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}else{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result = false;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;errorMsg.append(" the "+connectionInFo.getRowNumber()+" row of excel ,"+dataSource + " can not use");<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;}catch(SQLException se){<br />  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result = false;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;se.printStackTrace();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;errorMsg.append(se.getMessage());<br />
+&nbsp;&nbsp;&nbsp;    }finally {<br />
+&nbsp;&nbsp;&nbsp;    &nbsp;if(resultSet !=null){<br />
+&nbsp;&nbsp;&nbsp;    &nbsp;&nbsp;try {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resultSet.close();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} catch (SQLException e) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result = false;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;errorMsg.append("resultset close error");<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;    &nbsp;}
+&nbsp;&nbsp;&nbsp;    &nbsp;if(con != null){<br />
+&nbsp;&nbsp;&nbsp;    &nbsp;&nbsp;try {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;con.close();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} catch (SQLException e) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result = false;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;errorMsg.append("connection close error");<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;    &nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;}   
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;resultInfo.setCountNum(dsCount);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;resultInfo.setExcuteFlag(result);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;resultInfo.setErrorMsg(errorMsg.toString());<br />
+&nbsp;&nbsp;&nbsp;&nbsp;resultInfo.setResultInfos(resultInfos);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;infoList.add(resultInfo);<br />
+&nbsp;&nbsp;&nbsp;}else{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println("the "+connectionInFo.getRowNumber()+" row of excel ,"+dataSource + " is not found");<br />
+&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;}
+&nbsp;&nbsp;boolean writeTxtResult = FileUtil.createResultTxt(fileName,infoList,realSql);<br />
+&nbsp;&nbsp;if(!writeTxtResult){<br />
+&nbsp;&nbsp;&nbsp;System.out.println("txt result create or rewrite failed");<br />
+&nbsp;&nbsp;}
+&nbsp;&nbsp;
+&nbsp;&nbsp;connectionInFo.setRunDate(format.format(new Date()));<br />
+&nbsp;&nbsp;countMap.put("TOTAL-ROW-CNT", totalRowCount);<br />
+&nbsp;&nbsp;connectionInFo.setOtherCountMap(countMap);<br />
+&nbsp;&nbsp;return connectionInFo;<br />
+&nbsp;}
+</body>
+</html>

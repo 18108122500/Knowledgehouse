@@ -1,0 +1,80 @@
+#div_digg {
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    bottom: 0;
+    float: right;
+    font-size: 12px;
+    margin: 10px;
+    padding: 10px;
+    position: fixed;
+    right: 0;
+    text-align: center;
+    width: 120px;
+    z-index: 10;
+}
+.vote {
+    background-color: #FFFFFF;
+    border: 1px solid #008000;
+    bottom: 0;
+    float: right;
+    font-size: 12px;
+    margin: 10px;
+    padding: 10px;
+    position: fixed;
+    right: 0;
+    text-align: center;
+    width: 120px;
+    z-index: 10;
+}
+#MySignature {
+    margin-top: 10px;
+}
+#MySignature {
+    background: url("http://www.cnblogs.com/images/cnblogs_com/Terrylee/147338/o_info.png") no-repeat scroll 1% 50% #FFFEFE;
+    border: 1px solid #E5E5E5;
+    padding: 10px 10px 10px 60px;
+}
+#cnblogs_post_body h2 {
+    background: none repeat scroll 0 0 #2B6695;
+    border-radius: 6px;
+    box-shadow: 0 0 0 1px #5F5A4B, 1px 1px 6px 1px rgba(10, 10, 0, 0.5);
+    color: #FFFFFF;
+    font-family: "微软雅黑","宋体","黑体",Arial;
+    font-size: 17px;
+    font-weight: bold;
+    height: 25px;
+    line-height: 25px;
+    margin: 15px 0 !important;
+    padding: 5px 0 5px 20px;
+    text-shadow: 2px 2px 3px #222222;
+    width: 98%;
+}
+#cnblogs_post_body h2 a {
+    color: #EBEBEB;
+}
+#cnblogs_post_body h2 a:hover {
+    color: #FF6600;
+}
+.postTitle {
+    border-bottom: 1px dashed #CCCCCC;
+    clear: both;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1.5em;
+    width: 100%;
+}
+.postTitle a:link, .postTitle a:visited, .postTitle a:active {
+    transition: all 0.4s linear 0s;
+}
+.postTitle a:hover {
+    color: #FF6600;
+    margin-left: 10px;
+    text-decoration: none;
+}
+.note {
+    background: url("http://images.cnblogs.com/cnblogs_com/libaoheng/305804/o_yellow-pin.png") no-repeat scroll 20px 0 #FCFAA9;
+    box-shadow: 0 0 8px #AAAAAA;
+    clear: both;
+    margin: 10px 0;
+    padding: 15px 20px 15px 60px;
+}

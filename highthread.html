@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shCore.css">  
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shThemeDefault.css">  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJava.js"></script> 
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJScript.js"></script> 
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushXml.js"></script> 
+
+<script type="text/javascript" src="common/jquery.min.js"></script>   
+
+</head>
+<body>
+<pre class="brush:html:nocontrols:nogutter">
+1.小型网站
+使用简单的html静态页面就实现了，配合一些图片达到美化效果，所有的页面均存放在一个目录下，这样的网站对系统架构、性能的要求都很简单
+2.大型网站，比如门户网站
+在面对大量用户访问、高并发请求方面，基本的解决方案集中在这样几个环节：
+使用高性能的服务器、高性能的数据库、高效率的编程语言、还有高性能的Web容器。（提升投入）
+
+其他方向解决高并发引起的性能问题：
+1、HTML静态化
+
+门户和信息发布类型的网站：高效、可管理的CMS系统，可以实现最简单的信息录入自动生成静态页面
+社区类：将社区内的帖子、文章进行实时的静态化、有更新的时候再重新静态化也是大量使用的策略
+大量调用，更新频率小：比如论坛中论坛的公用设置信息，可以使用html静态化实现缓存
+
+2、web服务器与图片、资源服务器分离
+
+这样的架构可以降低提供页面访问请求的服务器系统压力，并且可以保证系统不会因为图片问题而崩溃。
+
+3、数据库集群、库表散列
+
+上面提到的数据库集群由于在架构、成本、扩张性方面都会受到所采用DB类型的限制，于是我们需要从应用程序的角度来考虑改善系统架构，
+库表散列是常用并且最有效的解决方案。
+我们在应用程序中安装业务和应用或者功能模块将数据库进行分离，不同的模块对应不同的数据库或者表，
+再按照一定的策略对某个页面或者功能进行更小的数据库散列，比如用户表，按照用户ID进行表散列，
+这样就能够低成本的提升系统的性能并且有很好的扩展性。
+
+4、缓存
+
+架构方面的缓存，对Apache比较熟悉的人都能知道Apache提供了自己的缓存模块，也可以使用外加的Squid模块进行缓存，
+这两种方式均可以有效的提高Apache的访问响应能力。
+网站程序开发方面的缓存，Linux上提供的Memory Cache是常用的缓存接口，可以在web开发中使用，
+比如用Java开发的时候就可以调用MemoryCache对一些数据进行缓存和通讯共享，一些大型社区使用了这样的架构。
+
+5、镜像
+6、负载均衡
+7、最新：CDN加速技术
+
+什么是CDN？
+
+CDN的全称是内容分发网络。其目的是通过在现有的Internet中增加一层新的网络架构，将网站的内容发布到最接近用户的网络“边缘”，
+使用户可以就近取得所需的内容，提高用户访问网站的响应速度。
+
+</pre>
+</body>
+<script type="text/javascript">  
+    SyntaxHighlighter.all();  
+</script
+</html>

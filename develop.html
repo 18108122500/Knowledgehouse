@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shCore.css">  
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shThemeDefault.css">  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJava.js"></script> 
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJScript.js"></script> 
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushXml.js"></script> 
+
+<script type="text/javascript" src="common/jquery.min.js"></script>   
+
+</head>
+<body>
+<pre class="brush:html:nocontrols:nogutter">
+Java SE、Java EE、Java ME三者的区别
+1. Java SE（Java Platform，Standard Edition）。
+Java SE 以前称为 J2SE。它允许开发和部署在桌面、服务器、嵌入式环境和实时环境中使用的 Java 应用程序。
+Java SE 包含了支持 Java Web 服务开发的类，并为 Java Platform，Enterprise Edition（Java EE）提供基础。
+
+2. Java EE（Java Platform，Enterprise Edition）。
+这个版本以前称为 J2EE。企业版本帮助开发和部署可移植、健壮、可伸缩且安全的服务器端 Java 应用程序。
+Java EE 是在 Java SE 的基础上构建的，它提供 Web 服务、组件模型、管理和通信 API，
+可以用来实现企业级的面向服务体系结构（service-oriented architecture，SOA）和 Web 2.0 应用程序。
+
+3. Java ME（Java Platform，Micro Edition）。
+这个版本以前称为 J2ME。Java ME 为在移动设备和嵌入式设备（比如手机、PDA、电视机顶盒和打印机）上运行的应用程序提供一个健壮且灵活的环境。
+Java ME 包括灵活的用户界面、健壮的安全模型、许多内置的网络协议以及对可以动态下载的连网和离线应用程序的丰富支持。
+基于 Java ME 规范的应用程序只需编写一次，就可以用于许多设备，而且可以利用每个设备的本机功能。
+
+说得更简单点
+
+Java SE 是做电脑上运行的软件。
+
+Java EE 是用来做网站的-（我们常见的JSP技术）
+
+Java ME 是做手机软件的。
+
+Step 1:安装JDK(Java Development Kit),java 开发工具包，包含了JRE(JVM+JAVA类库)和tools
+下载路径：http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html  一般选择SE,目前使用jdk8就可以了
+配置环境变量：
+新建系统变量：JAVA_HOME -》 E:\Java\jdk1.7.0（jdk安装目录）
+系统变量→寻找 Path 变量→编辑 - 》%JAVA_HOME%\bin;%JAVA_HOME%\jre\bin;
+系统变量→新建 CLASSPATH 变量 -》.;%JAVA_HOME%\lib;%JAVA_HOME%\lib\tools.jar
+检测：运行cmd 输入 java -version
+
+Step 2:安装编码软件
+Myeclipse:http://www.my-eclipse.cn/ 
+Eclipse:http://www.eclipse.org/downloads/eclipse-packages/  一般选择：Eclipse IDE for Java EE Developers
+Idea:https://www.jetbrains.com/idea/download/#section=windows  推荐使用，界面友好，提示功能强大，支持多种版本控制工具，自动保存代码
+
+Step 3:安装数据库
+MYSql:https://dev.mysql.com/downloads/mysql/ 中小型数据库，开源  点击download->No thanks, just start my download.
+Oracle:http://www.oracle.com/technetwork/database/enterprise-edition/downloads/112010-win64soft-094461.html  大型数据库，付费，支持大并发大数据
+
+Step 4:安装Maven
+下载地址：http://maven.apache.org/download.cgi  下载xx-bin.zip 
+解压到指定文件夹，比如d:\jiva  得到d:\java\xx
+新建系统变量：   MAVEN_HOME  变量值：d:\java\xx
+编辑系统变量：  Path         添加变量值： ;%MAVEN_HOME%\bin
+检测：cmd   输入 mvn --version
+
+配置本地仓库和资源下载地址：
+默认存放在：C:\Users\Administrator\.m2
+maven的安装目录/conf/settings.xml 找到有localRepository标签的地方，可以看到是背注释掉的，加上下面的一行配置，地址写你自己的仓库位置。这样maven下载的包就会放在这里
+<localRepository>E:\gitrespository</localRepository>
+
+<!-- 阿里云镜像 下载配置 -->
+<mirror>
+<id>nexus-aliyun</id>
+<mirrorOf>*</mirrorOf>
+<name>Nexus aliyun</name>
+<url>http://maven.aliyun.com/nexus/content/groups/public</url>
+</mirror>
+
+<!-- 另一个备用模板 -->
+
+<!-- <mirror>
+<id>alimaven</id>
+<mirrorOf>central</mirrorOf> 
+<name>aliyun maven</name>
+<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+</mirror>-->
+
+Step 5:安装web容器 tomcat   免费的开放源代码的Web应用服务器
+tomcat9下载地址： https://tomcat.apache.org/download-90.cgi
+
+系统变量名：CATALINA_HOME
+
+变量值：刚刚安装的路径
+
+1、如果我们直接从bin目录下运行startup.bat 启动，是不需要配置环境变量的，而如果我们直接使用命令则需要环境变量
+
+2、配置了环境变量对全局生效，所以如果我们需要同时启动多个tomcat，则要么一个环境都不配置，要么所有环境都配置
+
+Step 6:安装文本编辑器 Notepadd++
+下载地址： https://notepad-plus-plus.org/
+Step 7:安装版本管理工具 Git
+下载地址：https://git-scm.com/downloads  傻瓜安装
+安装好后配置环境变量：
+系统变量path：添加安装路径 eg: D:\mysoft\Git\cmd;
+检测：cmd 输入 git --version
+TortoiseGit下载： https://download.tortoisegit.org/tgit/
+
+Step 8:在编码软件中配置JDK,MAVEN,TOMCAT,GIT
+eclipse:
+1.tomcat,在Eclipse中配置Tomcat会让开发web工程更加方便。打开Eclipse，选择Window/Preference/Server/Runtime Environments，选择右边的Add 
+2.maven,Window -> Preference -> Maven -> Installation -> Add ;Window -> Preference -> Maven -> user Setting;(global 和 user都选择maven安装目录/conf/setting.xml)
+3.JDK,Window -> Preference -> Java -> Installed JREs -> Add ;
+4.git,help->eclipse market 搜索git 安装git插件  然后配置用户 Window -> Preference -> configuration 配置用户
+如果打不开 eclipse market ，就找到eclipse安装目录，在eclipse.ini中 添加如下内容
+-Dorg.eclipse.ecf.provider.filetransfer.excludeContributors=org.eclipse.ecf.provider.filetransfer.httpclient4
+  
+
+   
+
+   
+
+   
+
+
+</pre>
+</body>
+<script type="text/javascript">  
+    SyntaxHighlighter.all();  
+</script
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shCore.css">  
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shThemeDefault.css">  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJava.js"></script> 
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJScript.js"></script> 
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushXml.js"></script> 
+<script type="text/javascript" src="common/jquery.min.js"></script>   
+</head>
+<body>
+<pre class="brush:java:nocontrols:nogutter">
+	package com.synnex.learn.web;
+
+import java.util.concurrent.CountDownLatch;
+
+public class Test {
+	public static void main(String[] args) {
+		int taskNum = 10;
+		final CountDownLatch latch = new CountDownLatch(taskNum); 
+		try {
+			System.out.println("主线程等待子线程执行");
+			executeTask(latch,taskNum);
+			
+			latch.await();
+			System.out.println("子线程执行完毕，主线程继续执行");
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	private static void executeTask(CountDownLatch latch, int taskNum) {
+		for(int i=1;i<=taskNum;i++){
+			try{
+				 Thread thread = new Thread(new Runnable() {
+					@Override
+					public void run() {
+						System.out.println("excute"+Thread.currentThread().getName());
+					}
+				});
+				thread.setName(String.valueOf(i));
+				thread.start();
+			}catch(Exception e){
+				e.printStackTrace();
+			}finally {
+				if(latch != null){
+					latch.countDown();
+				}
+			}
+		}
+	}
+}
+
+
+</pre>
+</body>
+<script type="text/javascript">  
+    SyntaxHighlighter.all();  
+</script
+</html>
+
+

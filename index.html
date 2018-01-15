@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <title>知识点快速查询</title>
+  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+</head>
+<style>
+*{
+margin:0;
+padding:0;
+}
+#top{
+height:150px;
+background-color:blue;
+color:white;
+line-height:150px;
+text-align:center;
+}
+#menudiv{
+position:absolute;
+top:110px;
+left:15%;
+width:auto;
+background-color:blue;
+overflow:auto;
+}
+
+#menu { 
+font:16px verdana, arial, sans-serif;
+}
+
+
+ 
+#menu div {
+list-style:none;
+padding:5px;
+bottom:0px; 
+margin:10px; 
+float:left;
+color:white;
+width:100px;
+white-space: nowrap;
+text-overflow: ellipsis;
+-o-text-overflow: ellipsis; 
+overflow: hidden;
+cursor:pointer;
+display: inline-block;
+position: relative;
+border-radius: 3px;
+}
+
+.selected{background-color:red;}
+.noselected{background-color:gray;}
+.menuspan{
+	width:20px;
+	height:20px;
+	border-radius: 80px;
+	background-color:green;
+	-webkit-user-select:none;user-select:none;
+	position: absolute;
+	top: -5px;
+	right: -5px;
+}
+
+#left{
+position:absolute;
+top:150px;
+left:0;
+width:15%;
+background-color:#E0FFFF;
+overflow:auto;
+bottom:0px;
+border-top:1px solid white;
+}
+.rightFrame{
+position:absolute;
+top:150px;
+bottom:0px;
+left:15%;
+width:85%;
+height:84.5%;
+background-color:buttonface;
+overflow:auto;
+text-align:center;
+}
+#searchContent{
+position:fixed;
+text-align:center;
+width:15%;
+height:30px;
+line-height:30px;
+color:red;
+background-color:black;
+}
+
+li{
+margin-top:5px;
+}
+
+a {font-size:16px}   
+a:link {color: green; text-decoration:none;}
+a:active:{color: blue; }
+a:visited {color:purple;text-decoration:none;}
+a:hover {color: red; text-decoration:underline;}
+
+
+</style>
+<body>
+	<div id="top">
+		<h1>KNOWLEDGE SEARCH</h1>
+		<div id="menudiv">
+			<ul id="menu">
+			</ul>
+		</div>
+	</div>
+	<div id="left">
+		<input type="text" id="searchContent" onkeyup="query()" placeholder="SEARCH..."/>
+		<br />
+		<hr style="background-color:red;"/>
+		<br />
+		<ul id="linkUl">	
+			<a id="1" href="linux.html" target="rightFrame">
+				<li>常用的linux命令</li>
+			</a>
+			<a id="2" href="http://s-macke.github.io/jor1k/demos/main.html?user=XRkMmhG7gx&cpu=asm&n=1&relayURL=wss%3A%2F%2Frelay.widgetry.org%2F" target="rightFrame">
+				<li>linux在线模拟器</li>
+			</a>
+			<a id="3" href="defineregexp.html" target="rightFrame">
+				<li>JS正则表达式->定义与使用</li>
+			</a>
+			<a id="4" href="regexpvalidate.html" target="rightFrame">
+				<li>JS正则表达式->常用验证</li>
+			</a>
+			<a id="5" href="http://www.runoob.com/java/java-regular-expressions.html" target="rightFrame">
+				<li>java正则表达式</li>
+			</a>
+			<a id="6" href="http://www.runoob.com/java/java-tutorial.html" target="rightFrame">
+				<li>Java 教程</li>
+			</a>
+			<a id="7" href="http://www.runoob.com/java/java-intro.html" target="rightFrame">
+				<li>Java 简介</li>
+			</a>
+			<a id="8" href="http://www.runoob.com/java/java-environment-setup.html" target="rightFrame">
+				<li>Java 开发环境配置</li>
+			</a>
+			<a id="9" href="http://www.runoob.com/java/java-basic-datatypes.html" target="rightFrame">
+				<li>Java 基本数据类型</li>
+			</a>
+			<a id="10" href="http://www.runoob.com/java/java-variable-types.html" target="rightFrame">
+				<li>Java 变量类型</li>
+			</a>
+			<a id="11" href="http://www.runoob.com/java/java-number.html" target="rightFrame">
+				<li>Java Number &amp; Math 类</li>
+			</a>	
+			<a id="12" href="http://www.runoob.com/java/java-string.html" target="rightFrame">
+				<li>Java String 类</li>
+			</a>
+			<a id="13" href="http://www.runoob.com/java/java-date-time.html" target="rightFrame">
+				<li>Java date日期时间</li>
+			</a>
+			<a id="14" href="http://www.runoob.com/java/java-files-io.html" target="rightFrame">
+				<li>Java Stream、File、IO</li>
+			</a>
+			<a id="15" href="http://www.runoob.com/java/java-exceptions.html" target="rightFrame">
+				<li>Java exception异常处理</li>
+			</a>
+			<a id="16" href="http://www.runoob.com/java/java-scanner-class..html" target="rightFrame">
+				<li>Java scanner</li>
+			</a>
+			<a id="17" href="http://www.runoob.com/java/java-encapsulation.html" target="rightFrame">
+				<li>面向对象object -> 封装</li>
+			</a>
+			<a id="18" href="http://www.runoob.com/java/java-inheritance.html" target="rightFrame">
+				<li>面向对象object -> 继承</li>
+			</a>
+			<a id="19" href="http://www.runoob.com/java/java-polymorphism.html" target="rightFrame">
+				<li>面向对象object -> 多态</li>
+			</a>
+			<a id="20" href="http://www.runoob.com/java/java-abstraction.html" target="rightFrame">
+				<li>面向对象object -> 抽象 extents abstract class</li>
+			</a>
+			<a id="21" href="http://www.runoob.com/java/java-interfaces.html" target="rightFrame">
+				<li>面向对象object -> 接口 implement interface</li>
+			</a>
+			<a id="22" href="http://www.runoob.com/java/java-collections.html" target="rightFrame">
+				<li>集合 数组 list map collection</li>
+			</a>
+			<a id="23" href="http://www.runoob.com/java/java-collections.html" target="rightFrame">
+				<li>java 泛型 T E </li>
+			</a>		
+			<a id="24" href="http://www.runoob.com/java/java-sending-email.html" target="rightFrame">
+				<li>Java 发送邮件 EMAIL</li>
+			</a>
+			<a id="25" href="http://www.runoob.com/java/java-multithreading.html" target="rightFrame">
+				<li>Java 多线程编程THREAD RUNNABLE</li>
+			</a>
+			<a id="26" href="http://www.runoob.com/java/java-mysql-connect.html" target="rightFrame">
+				<li>Java MySQL JDBC连接</li>
+			</a>
+			<a id="27" href="http://cron.qqe2.com/" target="rightFrame">
+				<li>在线 cron 生成器</li>
+			</a>
+			<a id="28" href="moreresult.html" target="rightFrame">
+				<li>jdbc PreparedStatement 获取列 多结果</li>
+			</a>
+			<a id="29" href="http://tool.oschina.net/apidocs/apidoc?api=Spring-3.1.1" target="rightFrame">
+				<li>spring api</li>
+			</a>
+			<a id="30" href="CountDownLatch.html" target="rightFrame">
+				<li>CountDownLatch thread 多线程 主线程等待子线程执行结束继续执行</li>
+			</a>
+			<a id="31" href="multithread.html" target="rightFrame">
+				<li>thread 多线程，卖票，生命周期，同步，synchronized，线程完全</li>
+			</a>
+			<a id="32" href="http://blog.csdn.net/zk437092645/article/details/8641495" target="rightFrame">
+				<li>js syntaxhighlighter,高亮，格式化java代码</li>
+			</a>
+			<a id="33" href="deadlock.html" target="rightFrame">
+				<li>Java死锁 deadlock</li>
+			</a>
+			<a id="34" href="highthread.html" target="rightFrame">
+				<li>Java 高并发 大流量 访问量高</li>
+			</a>
+			<a id="35" href="deadlock.html" target="rightFrame">
+				<li>java json字符串与Map的相互转换</li>
+			</a>
+			<a id="36" href="deadlock.html" target="rightFrame">
+				<li>js json字符串与json对象的转换</li>
+			</a>
+			<a id="37" href="deadlock.html" target="rightFrame">
+				<li>http httpclient get post put delete</li>
+			</a>
+			<a id="38" href="deadlock.html" target="rightFrame">
+				<li>servlet</li>
+			</a>
+			<a id="39" href="deadlock.html" target="rightFrame">
+				<li>filter</li>
+			</a>
+			<a id="40" href="usuallyjs.html" target="rightFrame">
+				<li>js 常用jquery操作、checkbox,select,radio,table,a</li>
+			</a>
+			<a id="41" href="http://www.w3school.com.cn/tiy/t.asp?f=jquery_hide_this" target="rightFrame">
+				<li>js jquery html在线编辑器</li>
+			</a>
+			<a id="42" href="log4j.html" target="rightFrame">
+				<li>日志记录 log4j</li>
+			</a>
+			<a id="43" href="upload.html" target="rightFrame">
+				<li>java file文件 上传，下载</li>
+			</a>
+			<a id="44" href="https://www.bejson.com/jsoneditoronline/" target="rightFrame">
+				<li>json 在线格式化</li>
+			</a>
+			<a id="45" href="develop.html" target="rightFrame">
+				<li>java 开发环境搭建 JDK web容器tomcat 开发工具eclipse maven 数据库 文本编辑器</li>
+			</a>
+			<a id="46" href="develop.html" target="rightFrame">
+				<li>框架技术</li>
+			</a>
+			<a id="47" href="develop.html" target="rightFrame">
+				<li>maven</li>
+			</a>
+			<a id="48" href="develop.html" target="rightFrame">
+				<li>git 搭建、常用命令、开放的代码管理平台</li>
+			</a>
+			<a id="49" href="develop.html" target="rightFrame">
+				<li>spring boot,spring-boot</li>
+			</a>
+		</div>
+		</ul>
+	</div>
+	
+	
+	
+</body>
+<script>
+function query(){
+		var searchContent = document.getElementById("searchContent").value;
+		//显示与隐藏列表
+		var searchContent = searchContent.toUpperCase();
+		var lis = document.getElementById("linkUl").getElementsByTagName("li");
+		if(searchContent.trim()==""){
+		
+			for(var i=0;i<lis.length;i++){
+				lis[i].style.display = "block";
+			}
+			return;
+		}
+		for(var i=0;i<lis.length;i++){
+			var content = lis[i].innerHTML.toUpperCase();
+			if(content.indexOf(searchContent) > -1){
+				lis[i].style.display = "block";
+			}else{
+				lis[i].style.display = "none";
+			}
+		}
+};
+function deleteMenu(id){
+	$("#menu_"+id).remove();
+	$("#rightFrame_"+id).remove();
+};
+
+function openWindow(id){
+	$("#menu div").removeClass("selected").addClass("noselected");
+	$("#menu_"+id).removeClass("noselected").addClass("selected");
+	$("body iframe").hide();
+	$("#rightFrame_"+id).show();
+};
+
+$("#linkUl a").click(function(){
+	var id = $(this).attr("id");
+	var href = $(this).attr("href");
+	//如果存在直接选中
+	if($("#menu_"+id).length > 0){
+		$("#menu div").removeClass("selected").addClass("noselected");
+		$("#menu_"+id).removeClass("noselected").addClass("selected");
+		$("body iframe").hide();
+		$("#rightFrame_"+id).show();
+	}else{
+		var fr = '<iframe id="rightFrame_'+id+'" class="rightFrame" src="'+href+'" frameborder=0></iframe>';
+		var TAB = '<div onclick="openWindow('+id+')"id="menu_'+id+'" title="'+$(this).text()+'">'+$(this).text()+'<span class="menuspan" onclick="deleteMenu('+id+')">x</span></div>'; 
+		$("#menu").prepend(TAB);
+		//将其他的设置为没选中
+		$("#menu div").addClass("noselected");
+		$("#menu_"+id).removeClass("noselected").addClass("selected");
+		$("body").append(fr);
+		//显示当前窗口 其他隐藏
+		$("body iframe").hide();
+		$("#rightFrame_"+id).show();
+	}
+	
+	return false;
+});
+</script>
+</html>
