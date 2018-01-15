@@ -3,7 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Access-Control-Allow-Origin" content="*">
-  <title>知识点快速查询</title>
+  <title>Knowledge House</title>
+  <link rel="icon" href="picture/house.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="picture/house.ico" type="image/x-icon"/>
   <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
 </head>
 <style>
@@ -13,7 +15,7 @@ padding:0;
 }
 #top{
 height:150px;
-background-color:blue;
+background-color:#205081;
 color:white;
 line-height:150px;
 text-align:center;
@@ -23,7 +25,7 @@ position:absolute;
 top:110px;
 left:15%;
 width:auto;
-background-color:blue;
+background-color:#205081;
 overflow:auto;
 }
 
@@ -67,12 +69,13 @@ border-radius: 3px;
 #left{
 position:absolute;
 top:150px;
-left:0;
+left:0px;
 width:15%;
 background-color:#E0FFFF;
 overflow:auto;
 bottom:0px;
 border-top:1px solid white;
+padding-left:5px;
 }
 .rightFrame{
 position:absolute;
@@ -88,11 +91,13 @@ text-align:center;
 #searchContent{
 position:fixed;
 text-align:center;
-width:15%;
+width:15.2%;
 height:30px;
 line-height:30px;
-color:red;
-background-color:black;
+color:white;
+background-color:#205081;
+left:0px;
+border:0;outline:none;
 }
 
 li{
@@ -262,7 +267,7 @@ a:hover {color: red; text-decoration:underline;}
 			<a id="47" href="develop.html" target="rightFrame">
 				<li>maven</li>
 			</a>
-			<a id="48" href="develop.html" target="rightFrame">
+			<a id="48" href="git.html" target="rightFrame">
 				<li>git 搭建、常用命令、开放的代码管理平台</li>
 			</a>
 			<a id="49" href="develop.html" target="rightFrame">

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shCore.css">  
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shThemeDefault.css">  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJava.js"></script> 
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJScript.js"></script> 
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushXml.js"></script> 
+
+<script type="text/javascript" src="common/jquery.min.js"></script>   
+
+</head>
+<body>
+<pre class="brush:html:nocontrols:nogutter">
+下载地址：https://git-scm.com/downloads  傻瓜安装 提供git命令操作界面
+安装好后配置环境变量：
+系统变量path：添加安装路径 eg: D:\mysoft\Git\cmd;
+检测：cmd 输入 git --version
+TortoiseGit下载： https://download.tortoisegit.org/tgit/ 提供图形化操作界面
+
+以下操作均使用git命令行实现:git bash here
+
+</pre>
+<pre class="brush:js:nocontrols:nogutter">
+git创建新仓库：
+	mkdir testGit  //创建一个文件夹，作为本地仓库
+	cd testGit //进入仓库
+	git init //初始化仓库，会创建一个.git文件，默认创建master分支
+	git add . //将该文件中的所有文件添加到本地版本库，
+	git commit -m "注释" //提交到本地版本库
+	git remote add origin git@github.com:YotrolZ/helloTest.git //本地版本库与远程仓库关联
+	git push -u origin master //将最新的修改推送到远程仓库
+	
+	注意:
+	1.每次push前要先进行git add 文件名 和  git commit -m "注释"
+	2.在第一次进行push时,我们加上-u参数,后期push时就不用再加-u参数
+</pre>
+<pre class="brush:js:nocontrols:nogutter">
+git创建本地分支：
+	1.创建本地分支 
+	git branch 分支名，例如：git branch branch_abc
+
+	2.切换本地分支 
+	git checkout 分支名，例如从master切换到分支：git checkout branch_abc
+
+	3.在新分支上做一些修改并提交到本地分支
+	touch test.txt
+	git add test.txt
+	git commit -m "add a test.txt"
+	
+	4.提交分支数据到远程服务器 
+	git push origin branch_abc:new_ branch_abc  //远程服务器会创建new_ branch_abc接收branch_abc的内容
+
+	
+</pre>
+<pre class="brush:js:nocontrols:nogutter">
+git合并代码：
+</pre>
+<pre class="brush:js:nocontrols:nogutter">
+git解决冲突：
+</pre>
+<pre class="brush:js:nocontrols:nogutter">
+git回退版本：
+</pre>
+<pre class="brush:js:nocontrols:nogutter">
+git将一个本地分支的修改提交到其他分支：
+</pre>
+
+
+<pre class="brush:js:nocontrols:nogutter">
+git常用命令：
+</pre>
+
+
+</body>
+<script type="text/javascript">  
+    SyntaxHighlighter.all();  
+</script
+</html>
