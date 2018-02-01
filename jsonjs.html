@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shCore.css">  
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shThemeDefault.css">  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJava.js"></script> 
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJScript.js"></script> 
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushXml.js"></script> 
+
+<script type="text/javascript" src="common/jquery.min.js"></script>   
+
+</head>
+<body>
+<pre class="brush:js:nocontrols:nogutter">
+//定义JSON对象
+var jsonObject = {"name":"albert","age":18};
+alert(jsonObject.name);
+var jsonObject2 = new Object();
+jsonObject2.name="albert2";
+jsonObject2.age=25;
+alert(jsonObject2.age);
+alert(jsonObject);//输出 object object
+//json 对象转json string
+var jsonStr = JSON.stringify(jsonObject);//输出 {"name":"albert","age":18}
+alert(jsonStr);
+
+//定义json 字符串
+var jsonstr2 = '{"name":"albert","age":35}';
+alert(jsonstr2);
+
+//json 字符串转json对象
+var jsonObject3 = JSON.parse(jsonstr2);
+alert(jsonObject3.age);//35
+</pre>
+</body>
+<script type="text/javascript">  
+    SyntaxHighlighter.all();  
+</script
+</html>

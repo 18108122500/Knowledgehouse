@@ -1,0 +1,25 @@
+jsd - 3.8.5
+jira - 7.5.4
+
+jira-servicedesk-3.2.0-139.jar  源码包修改
+
+1.源码包位置，安装JSD后
+/home/jiraprod/jirahome/plugins/installed-plugins/jira-servicedesk-3.2.0-139.jar
+2.修改的class列表
+com.atlassian.servicedesk.internal.feature.emailchannel.emailplatform.handler
+-Configuration.class
+-HelpDeskMailHandler.class
+-IssueTools.class
+-MessageTools.class
+-PluginTools.class
+-TestHelpUtils.class
+3.修改的配置文件列表，以及内容
+servicedesk/notifications/conversational/issue-conversational-notifications.soy
+	com.atlassian.servicedesk.internal.feature.emailchannel.IncomingEmailParser 修改为 com.atlassian.servicedesk.internal.feature.emailchannel.IncomingEmailExtensionParser
+	com.atlassian.servicedesk.internal.notifications.IssueConversationalNotificationManagerImpl 修改为 com.atlassian.servicedesk.internal.notifications.IssueConversationalNotificationExtensionManagerImpl
+	com.atlassian.servicedesk.internal.notifications.IssueConversationalNotificationRendererImpl 修改为 lassian.servicedesk.internal.notifications.IssueConversationalNotificationExtensionRendererImpl
+servicedesk/notifications/issue-notifications.soy
+META-INF/plugin-components/component
+META-INF/plugin-descriptors/sd-mail-jepp.xml
+
+

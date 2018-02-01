@@ -1,0 +1,102 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shCore.css">  
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shThemeDefault.css">  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJava.js"></script> 
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushXml.js"></script> 
+</head>
+<body>
+<pre class="brush:xml:nocontrols:nogutter">
+
+<!-- 引入json包： -->
+<dependency>
+	<groupId>com.fasterxml.jackson.jaxrs</groupId>
+	<artifactId>jackson-jaxrs-json-provider</artifactId>
+	<version>2.8.6</version>
+</dependency>
+</pre>
+<pre class="brush:java:nocontrols:nogutter">
+
+
+package com.synnex.learn.web;
+
+import java.util.Map;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class Test {
+	
+	static ObjectMapper objectMapper = new ObjectMapper();
+	
+	public static void main(String[] args) {
+		Test test = new Test();
+		X x = test.new X("albert", 18);
+		String jsonStr = "";
+		try {
+			jsonStr = toJson(x);
+			System.out.println(jsonStr);//{"name":"albert","age":18}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			Map map = fromJson(jsonStr,Map.class);
+			System.out.println(map.get("name")+","+map.get("age"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	//定义对象转json
+	public static String toJson(Object obj) throws Exception {
+
+		return objectMapper.writeValueAsString(obj);
+	}
+
+	//定义json串转对象 一般转MAP
+	public static <T> T fromJson(String jsonContent, Class<T> clazz)
+			throws Exception {
+
+		return objectMapper.readValue(jsonContent, clazz);
+	}
+	
+	class X{
+		private String name;
+		private int age;
+		
+		public X(String name, int age) {
+			super();
+			this.name = name;
+			this.age = age;
+		}
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public int getAge() {
+			return age;
+		}
+		public void setAge(int age) {
+			this.age = age;
+		}
+		
+		
+	}
+}
+
+</pre>
+</body>
+<script type="text/javascript">  
+    SyntaxHighlighter.all();  
+</script
+</html>
+
+
+

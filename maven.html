@@ -1,0 +1,49 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shCore.css">  
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shThemeDefault.css">  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJava.js"></script> 
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushXml.js"></script> 
+</head>
+<body>
+<pre class="brush:xml:nocontrols:nogutter">
+下载地址：http://maven.apache.org/download.cgi  下载xx-bin.zip 
+解压到指定文件夹，比如d:\jiva  得到d:\java\xx
+新建系统变量：   MAVEN_HOME  变量值：d:\java\xx
+编辑系统变量：  Path         添加变量值： ;%MAVEN_HOME%\bin
+检测：cmd   输入 mvn --version
+ 
+配置本地仓库和资源下载地址：
+默认存放在：C:\Users\Administrator\.m2
+maven的安装目录/conf/settings.xml 找到有localRepository标签的地方，可以看到是背注释掉的，
+加上下面的一行配置，地址写你自己的仓库位置。这样maven下载的包就会放在这里
+<localrepository>E:\gitrespository</localrepository>
+ 
+<!-- 阿里云镜像 下载配置 -->
+<mirror>
+<id>nexus-aliyun</id>
+<mirrorof>*</mirrorof>
+<name>Nexus aliyun</name>
+<url>http://maven.aliyun.com/nexus/content/groups/public</url>
+</mirror>
+ 
+<!-- 另一个备用模板 -->
+ 
+<mirror>
+<id>alimaven</id>
+<mirrorOf>central</mirrorOf> 
+<name>aliyun maven</name>
+<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+</mirror>
+</pre>
+</body>
+<script type="text/javascript">  
+    SyntaxHighlighter.all();  
+</script
+</html>
+
+
+

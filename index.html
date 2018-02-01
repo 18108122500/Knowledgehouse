@@ -20,6 +20,18 @@ color:white;
 line-height:150px;
 text-align:center;
 }
+#logo{
+position:absolute;
+top:10px;
+left:100px;
+}
+#searchpanel{
+font-size:36px;
+color:white;
+position:absolute;
+top:0px;
+right:100px;
+}
 #menudiv{
 position:absolute;
 top:110px;
@@ -115,9 +127,15 @@ a:hover {color: red; text-decoration:underline;}
 <body>
 	<div id="top">
 		<h1>KNOWLEDGE SEARCH</h1>
+		<img id="logo" src="picture/house.png"/>
 		<div id="menudiv">
 			<ul id="menu">
 			</ul>
+		</div>
+		<div id="searchpanel">
+			<a id="10000" href="https://www.baidu.com/" style="color:white;" target="rightFrame">百度</a>
+			&nbsp;&nbsp;
+			<a id="20000" href="http://cn.bing.com/" style="color:white;" target="rightFrame">微软必应</a>
 		</div>
 	</div>
 	<div id="left">
@@ -228,10 +246,10 @@ a:hover {color: red; text-decoration:underline;}
 			<a id="34" href="highthread.html" target="rightFrame">
 				<li>Java 高并发 大流量 访问量高</li>
 			</a>
-			<a id="35" href="deadlock.html" target="rightFrame">
+			<a id="35" href="json2map.html" target="rightFrame">
 				<li>java json字符串与Map的相互转换</li>
 			</a>
-			<a id="36" href="deadlock.html" target="rightFrame">
+			<a id="36" href="jsonjs.html" target="rightFrame">
 				<li>js json字符串与json对象的转换</li>
 			</a>
 			<a id="37" href="deadlock.html" target="rightFrame">
@@ -262,16 +280,35 @@ a:hover {color: red; text-decoration:underline;}
 				<li>java 开发环境搭建 JDK web容器tomcat 开发工具eclipse maven 数据库 文本编辑器</li>
 			</a>
 			<a id="46" href="develop.html" target="rightFrame">
-				<li>框架技术</li>
+				<li>框架技术,MVC，SSH,SSM</li>
 			</a>
-			<a id="47" href="develop.html" target="rightFrame">
+			<a id="47" href="maven.html" target="rightFrame">
 				<li>maven</li>
 			</a>
+			<a id="4700001" href="http://www.yiibai.com/maven/" target="rightFrame">
+				<li>maven 官方教程</li>
+			</a>
+			
 			<a id="48" href="git.html" target="rightFrame">
 				<li>git 搭建、常用命令、开放的代码管理平台</li>
 			</a>
 			<a id="49" href="develop.html" target="rightFrame">
 				<li>spring boot,spring-boot</li>
+			</a>
+			<a id="50" href="develop.html" target="rightFrame">
+				<li>设计模式</li>
+			</a>
+			<a id="51" href="develop.html" target="rightFrame">
+				<li>模板语言，freemarker</li>
+			</a>
+			<a id="52" href="develop.html" target="rightFrame">
+				<li>分布式开发,RPC,CAP,EDAS,SOA,分布式框架-Hadoop,Dubbo,ZooKeeper,avro,thrift,zeroc ice,sofa-pbrpc</li>
+			</a>
+			<a id="53" href="timezone.html" target="rightFrame">
+				<li>日期Date,Calendar,时区转换，Timezone</li>
+			</a>
+			<a id="54" href="compare.html" target="rightFrame">
+				<li>对象按照属性排序，compare,Comparable,Comparator</li>
 			</a>
 		</div>
 		</ul>
@@ -312,9 +349,35 @@ function openWindow(id){
 	$("#menu_"+id).removeClass("noselected").addClass("selected");
 	$("body iframe").hide();
 	$("#rightFrame_"+id).show();
+	
 };
 
 $("#linkUl a").click(function(){
+	var id = $(this).attr("id");
+	var href = $(this).attr("href");
+	//如果存在直接选中
+	if($("#menu_"+id).length > 0){
+		$("#menu div").removeClass("selected").addClass("noselected");
+		$("#menu_"+id).removeClass("noselected").addClass("selected");
+		$("body iframe").hide();
+		$("#rightFrame_"+id).show();
+	}else{
+		var fr = '<iframe id="rightFrame_'+id+'" class="rightFrame" src="'+href+'" frameborder=0></iframe>';
+		var TAB = '<div onclick="openWindow('+id+')"id="menu_'+id+'" title="'+$(this).text()+'">'+$(this).text()+'<span class="menuspan" onclick="deleteMenu('+id+')">x</span></div>'; 
+		$("#menu").prepend(TAB);
+		//将其他的设置为没选中
+		$("#menu div").addClass("noselected");
+		$("#menu_"+id).removeClass("noselected").addClass("selected");
+		$("body").append(fr);
+		//显示当前窗口 其他隐藏
+		$("body iframe").hide();
+		$("#rightFrame_"+id).show();
+	}
+	
+	return false;
+});
+
+$("#searchpanel a").click(function(){
 	var id = $(this).attr("id");
 	var href = $(this).attr("href");
 	//如果存在直接选中

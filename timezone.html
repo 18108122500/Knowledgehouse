@@ -1,0 +1,67 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shCore.css">  
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shThemeDefault.css">  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJava.js"></script> 
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushXml.js"></script> 
+</head>
+<body>
+<pre class="brush:java:nocontrols:nogutter">
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+
+public class DateTest {
+	public static void main(String[] args) {
+		//时区对应城市  timezone id
+		String[][] arg = new String[][]{{"ACT", "Australia/Darwin"}, {"AET", "Australia/Sydney"},
+			{"AGT", "America/Argentina/Buenos_Aires"}, {"ART", "Africa/Cairo"}, {"AST", "America/Anchorage"},
+			{"BET", "America/Sao_Paulo"}, {"BST", "Asia/Dhaka"}, {"CAT", "Africa/Harare"},
+			{"CNT", "America/St_Johns"}, {"CST", "America/Chicago"}, {"CTT", "Asia/Shanghai"},
+			{"EAT", "Africa/Addis_Ababa"}, {"ECT", "Europe/Paris"}, {"EST", "America/New_York"},
+			{"HST", "Pacific/Honolulu"}, {"IET", "America/Indianapolis"}, {"IST", "Asia/Calcutta"},
+			{"JST", "Asia/Tokyo"}, {"MIT", "Pacific/Apia"}, {"MST", "America/Denver"}, {"NET", "Asia/Yerevan"},
+			{"NST", "Pacific/Auckland"}, {"PLT", "Asia/Karachi"}, {"PNT", "America/Phoenix"},
+			{"PRT", "America/Puerto_Rico"}, {"PST", "America/Los_Angeles"}, {"SST", "Pacific/Guadalcanal"},
+			{"VST", "Asia/Saigon"}};
+			
+			//PST+3H=EST=CST-13H
+			Date date = new Date();
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			System.out.println("CST(current):"+simpleDateFormat.format(date));
+			
+			Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("America/New_York"));
+			Calendar calendar2 = Calendar.getInstance();
+			calendar2.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONDAY), calendar.get(Calendar.DAY_OF_MONTH), 
+					calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
+			System.out.println("EST:"+simpleDateFormat.format(calendar2.getTime()));
+			
+			Date date2 = changeTimeZone(date,TimeZone.getDefault(),TimeZone.getTimeZone("America/New_York"));
+			System.out.println("EST:"+simpleDateFormat.format(date2));
+			
+			Date date3 = changeTimeZone(date,TimeZone.getDefault(),TimeZone.getTimeZone("America/Los_Angeles"));
+			System.out.println("PST:"+simpleDateFormat.format(date3));
+	}
+	
+	//使用偏移量进行时区转换
+	public static Date changeTimeZone(Date date, TimeZone oldZone, TimeZone newZone) {    
+        Date dateTmp = null;    
+        if (date != null) {    
+            int timeOffset = oldZone.getRawOffset() - newZone.getRawOffset();    
+            dateTmp = new Date(date.getTime() - timeOffset);    
+        }    
+        return dateTmp;    
+	}    
+	
+}
+</pre>
+</body>
+<script type="text/javascript">  
+    SyntaxHighlighter.all();  
+</script
+</html>

@@ -1,0 +1,167 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shCore.css">  
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shThemeDefault.css">  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJava.js"></script> 
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushXml.js"></script> 
+</head>
+<body>
+<pre class="brush:java:nocontrols:nogutter">
+import java.util.Date;
+
+public class Student implements Comparable<Student>{
+	
+	private String name;
+	private Integer age;
+	private Double grade;
+	private Date birth;
+	
+	public Student(String name, int age, double grade, Date birth) {
+		super();
+		this.name = name;
+		this.age = age;
+		this.grade = grade;
+		this.birth = birth;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Integer getAge() {
+		return age;
+	}
+
+	public void setAge(Integer age) {
+		this.age = age;
+	}
+
+	public Double getGrade() {
+		return grade;
+	}
+
+	public void setGrade(Double grade) {
+		this.grade = grade;
+	}
+
+	public Date getBirth() {
+		return birth;
+	}
+
+	public void setBirth(Date birth) {
+		this.birth = birth;
+	}
+
+	@Override
+	public int compareTo(Student o) {
+		return age.compareTo(o.age);
+	}
+}
+
+</pre>
+<pre class="brush:java:nocontrols:nogutter">
+import java.util.Comparator;
+
+public class StudentComparator implements Comparator<Student>{
+	private String compareFiled;
+	private String order;
+	
+	public StudentComparator(String compareFiled,String order) {
+		super();
+		this.compareFiled = compareFiled;
+		this.order = order;
+	}
+
+
+	@Override
+	public int compare(Student o1, Student o2) {
+		int flag = 0;
+		if("age".equals(compareFiled)){//按年龄
+			if("ASC".equalsIgnoreCase(order)){//升序
+				flag = o1.getAge().compareTo(o2.getAge());
+			}else{//降序
+				flag = o2.getAge().compareTo(o1.getAge());
+			}
+			if(flag==0){//如果年龄一样，按照出生日期升序
+				flag = o1.getBirth().compareTo(o2.getBirth());
+			}
+		}else if("birth".equals(compareFiled)){//按出生日期
+			if("ASC".equalsIgnoreCase(order)){//升序
+				flag = o1.getBirth().compareTo(o2.getBirth());
+			}else{//降序
+				flag = o2.getBirth().compareTo(o1.getBirth());
+			}
+		}
+		return flag;
+	}
+
+}
+
+</pre>
+<pre class="brush:java:nocontrols:nogutter">
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class Test {
+	public static void main(String[] args) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			Student student = new Student("1", 19, 80d, simpleDateFormat.parse("1992-04-18"));
+			Student student1 = new Student("2", 19, 81d, simpleDateFormat.parse("1992-04-17"));
+			Student student2 = new Student("3", 20, 82d, simpleDateFormat.parse("1992-03-18"));
+			Student student3 = new Student("4", 15, 83d, simpleDateFormat.parse("1992-08-18"));
+			
+			List<Student> list = new ArrayList<>();
+			list.add(student);
+			list.add(student1);
+			list.add(student2);
+			list.add(student3);
+			System.out.println("===before sort===");
+			for(Student s:list){
+				System.out.println(s.getName()+":"+s.getAge());
+			}
+			//list中的对象自己实现Comparable接口，实现自比较排序。但是这不符合pojo设计，而且不方便我们指定比较属性
+			Collections.sort(list);
+			//使用外部比较器，可以方便指定比较规则，而且不影响原对象
+			Collections.sort(list,new StudentComparator("age", "asc"));
+			System.out.println("===after sort===");
+			for(Student s:list){
+				System.out.println(s.getName()+":"+s.getAge());
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}
+</pre>
+<pre class="brush:java:nocontrols:nogutter">
+===before sort===
+1:19
+2:19
+3:20
+4:15
+===after sort===
+4:15
+2:19
+1:19
+3:20
+</pre>
+</body>
+<script type="text/javascript">  
+    SyntaxHighlighter.all();  
+</script
+</html>
+
+
+
