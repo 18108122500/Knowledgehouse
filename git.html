@@ -33,7 +33,7 @@ git创建新仓库：
 	git commit -m "注释" //提交到本地版本库
 	git remote add origin git@github.com:YotrolZ/helloTest.git //本地版本库与远程仓库关联
 	git push -u origin master //将最新的修改推送到远程仓库
-	
+	git remote prune origin //清除远程不存在的分支目录缓存
 	注意:
 	1.每次push前要先进行git add 文件名 和  git commit -m "注释"
 	2.在第一次进行push时,我们加上-u参数,后期push时就不用再加-u参数

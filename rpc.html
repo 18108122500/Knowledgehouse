@@ -1,0 +1,64 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shCore.css">  
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shThemeDefault.css">  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJava.js"></script> 
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushXml.js"></script> 
+</head>
+<body>
+<pre class="brush:html:nocontrols:nogutter">
+分布式系统理解：
+传统系统：各个功能模块都耦合在一个庞大的工程中，这样不利于维护，扩展和升级。
+分布式系统：按功能模块将一个大系统拆分成多个子系统，系统之间通过接口通信，这样降低了耦合，方便维护和扩展。只是加大了写接口的工作量。
+
+布式架构下系统间交互的5种通信模式
+
+request/response模式（同步模式）：客户端发起请求一直阻塞到服务端返回请求为止。
+
+Callback（异步模式）：客户端发送一个RPC请求给服务器，服务端处理后再发送一个消息给消息发送端提供的callback端点，此类情况非常合适以下场景：A组件发送RPC请求给B，B处理完成后，需要通知A组件做后续处理。
+
+Future模式：客户端发送完请求后，继续做自己的事情，返回一个包含消息结果的Future对象。客户端需要使用返回结果时，使用Future对象的.get(),如果此时没有结果返回的话，会一直阻塞到有结果返回为止。
+
+Oneway模式：客户端调用完继续执行，不管接收端是否成功。
+
+Reliable模式：为保证通信可靠，将借助于消息中心来实现消息的可靠送达，请求将做持久化存储，在接收方在线时做送达，并由消息中心保证异常重试。
+
+五种通信模式的实现方式-同步点对点服务模式
+
+五种通信模式的实现方式-异步点对点消息模式1
+
+五种通信模式的实现方式-异步点对点消息模式2
+
+五种通信模式的实现方式-异步广播消息模式
+
+ 
+
+分布式架构下的服务治理
+
+服务治理是服务框架/服务总线的核心功能。所谓服务治理，是指服务的提供方和消费方达成一致的约定，保证服务的高质量。服务治理功能可以解决将某些特定流量引入某一批机器，以及限制某些非法消费者的恶意访问，并在提供者处理量达到一定程度是，拒绝接受新的访问。
+
+基于服务框架Dubbo的服务治理-服务管理
+
+可以知道你的系统，对外提供了多少服务，可以对服务进行升级、降级、停用、权重调整等操作
+可以知道你提供的服务，谁在使用，因业务需求，可以对该消费者实施屏蔽、停用等操作
+
+基于服务框架Dubbo的服务治理-服务监控
+可以统计服务的每秒请求数、平均响应时间、调用量、峰值时间等，作为服务集群规划、性能调优的参考指标。
+
+ 
+
+基于服务框架Dubbo的服务治理-服务路由
+
+基于服务框架Dubbo的服务治理-服务保护
+</pre>
+</body>
+<script type="text/javascript">  
+    SyntaxHighlighter.all();  
+</script
+</html>
+
+
+
