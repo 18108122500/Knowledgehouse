@@ -34,7 +34,7 @@ root      7010
 -Djava.io.tmpdir=/usr/local/tomcat/temp 
 org.apache.catalina.startup.Bootstrap start<br />
 
-*如果你想直接干掉Tomcat，你可以使用kill命令，直接杀死Tomcat进程<br />
+* 如果你想直接干掉Tomcat，你可以使用kill命令，直接杀死Tomcat进程<br />
 
  kill -9 7010<br />
 然后继续查看Tomcat是否关闭<br />
@@ -56,6 +56,14 @@ $grep -C 5 'parttern' inputfile //打印匹配行的前后5行<br />
 $grep -A 5 'parttern' inputfile //打印匹配行的后5行<br />
  
 $grep -B 5 'parttern' inputfile //打印匹配行的前5行<br />
+
+* 修改文件格式，如果命令文件是在windows下创建的，然后要在linux环境执行不了：<br />
+vi 文件名
+:set ff?   -- 查看格式
+:set ff=unix
+:wq
+
+
 </p>
 <p><span style="font-family: 'comic sans ms', sans-serif;"><strong><span style="font-size: 18px;"><a name="zhiling"></a>常用指令</span></strong></span></p>
 <p><span style="font-family: 'comic sans ms', sans-serif; font-size: 14px;">wget　　 &nbsp; &nbsp; &nbsp; &nbsp;下载文件</span></p>

@@ -4,24 +4,466 @@
   <meta charset="utf-8">
   <meta http-equiv="Access-Control-Allow-Origin" content="*">
 <link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shCore.css">  
-<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shThemeDefault.css">  
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shCoreEmacs.css">  
 <script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>  
-<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJava.js"></script> 
-<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJScript.js"></script> 
-<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushXml.js"></script> 
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shAutoloader.js"></script> 
 
-<strong style="color:red">
-注：本文讲述如何搭建SPRING+SPRINGMVC+MYBATIS的maven web项目，搭建成功后使用tomcat发布，并且实现文件上传下载功能<
-</strong>
-第一步：
+
 <script type="text/javascript" src="common/jquery.min.js"></script>   
-
 </head>
 <body>
-<pre class="brush:js:nocontrols:nogutter">
+<strong style="color:red">
+注：文件基本操作工具类，包括文本文件，二进制文件，excel文件操作
+</strong>
+<br /><br />
+<strong style="color:black">
+普通文本操作
+</strong>
+<pre class="brush:java:nocontrols:nogutter">
+package com.synnex.learn.utils;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+
+@SuppressWarnings("resource")
+
+public class FileUtil {
+	
+	//检查指定文件是否是指定的某些类型
+	public static boolean checkFileType(File file ,List<String> fileTypeList){
+		for(String type : fileTypeList){
+			if(file.getName().toLowerCase().endsWith(type)){
+				continue;
+			}else{
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	//读取文件内容到字符串
+	public static String readFile(File file) throws IOException{
+		if(file == null){
+			return null;
+		}
+		if(!judgeExist(file)){
+			return null;
+		}
+		
+		BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+		String line = null;
+		StringBuffer stringBuffer = new StringBuffer();
+	
+		while((line = bufferedReader.readLine()) != null){
+			stringBuffer.append(line).append(" ");
+		}
+		return stringBuffer.toString();
+	}
+	
+	//按行读取文件内容到list
+	public static List<String> readToList(File file) throws IOException{
+		List<String> list = new ArrayList<>();
+		if(file == null){
+			return list;
+		}
+		if(!judgeExist(file)){
+			return list;
+		}
+		BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+		String line = null;
+		while((line = bufferedReader.readLine()) != null){
+			list.add(line);
+		}
+		return list;
+	}
+	
+	//根据筛选标记，删除包含了筛选内容的行，返回剩下的行组成的list
+	public static List<String> deleteLines(File f1,List<String> deleteFlag) throws IOException{
+		List<String> list = new ArrayList<>();
+		if(f1 == null){
+			return null;
+		}
+		if(!judgeExist(f1)){
+			return null;
+		}
+		BufferedReader bufferedReader = new BufferedReader(new FileReader(f1));
+		String line = null;
+		while((line = bufferedReader.readLine()) != null){
+			boolean exflag = false;
+			for(String fladg:deleteFlag){
+				if(line.indexOf(fladg)>-1){
+					exflag =true;
+					break;
+				}
+			}
+			if(!exflag){
+				list.add(line);
+			}
+			
+		}
+		
+		
+		return list;
+	}
+	
+	//生成指定路径和内容的文件
+	public static boolean writeFile(List<String> content,String filename) {
+        try {
+            File f = new File(filename);
+            if (!f.exists()) {
+                f.createNewFile();
+            }
+            OutputStreamWriter write = new OutputStreamWriter(new FileOutputStream(f));
+            BufferedWriter writer = new BufferedWriter(write);
+            for(String s:content){
+            	writer.newLine();
+            	writer.write(s);
+            }
+            writer.flush(); 
+            write.close();
+            writer.close();
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+	
+	//将文件和文件内容读取到map
+	public static Map<File,String> readFile(List<File> fileList) throws IOException{
+		Map<File,String> map = new HashMap<>();
+		for(File file : fileList){
+			map.put(file, readFile(file));
+		}
+		return map;
+	}
+	
+	//判断一个文件是否存在
+	public static boolean judgeExist(File file){
+		if(file == null){
+			return false;
+		}
+		return file.exists();
+	}
+	
+	//判断一个文件是否是文件夹
+	public static boolean isDrectory(File file){
+		if(file == null){
+			return false;
+		}
+		return file.isDirectory();
+	}
+	
+	//读取某个文件夹下的所有指定类型的文件
+	public static List<File> readDrectory(File file,List<File> filelist,String fileType){
+		if(file.exists()){
+			if(file.isDirectory()){
+				File[] files = file.listFiles(); 
+		        if (files != null) {
+		            for (int i = 0; i < files.length; i++) {
+		                String fileName = files[i].getName();
+		                if (files[i].isDirectory()) {
+		                	readDrectory(files[i],filelist,fileType);
+		                } else if (fileName.endsWith(fileType)) {
+		                    filelist.add(files[i]);
+		                } else {
+		                    continue;
+		                }
+		            }
+
+		        }
+			}else{
+				filelist.add(file);
+			}
+		}else{
+			return filelist;
+		}
+        
+        return filelist;
+	}
+	
+	//按1次1K的速度读取文件到字节数组,之后可以使用new String(bs, "GBK")转换成字符串，编码以文件编码为准，防止中文乱码
+	public static byte[] toByteArray(String filename) throws IOException {
+		 
+        File f = new File(filename);
+        if (!f.exists()) {
+            throw new FileNotFoundException(filename);
+        }
+ 
+        ByteArrayOutputStream bos = new ByteArrayOutputStream((int) f.length());
+        BufferedInputStream in = null;
+        try {
+            in = new BufferedInputStream(new FileInputStream(f));
+            int buf_size = 1024;
+            byte[] buffer = new byte[buf_size];
+            int len = 0;
+            while (-1 != (len = in.read(buffer, 0, buf_size))) {
+                bos.write(buffer, 0, len);
+            }
+            return bos.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            try {
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            bos.close();
+        }
+    }
+	
+}
+
+</pre>
+<strong style="color:black">
+Excel操作
+</strong>
+
+<pre class="brush:xml:nocontrols:nogutter">
+	<dependency>
+		  <groupId>org.apache.poi</groupId>
+		  <artifactId>poi</artifactId>
+		  <version>3.9</version>
+	</dependency>
+	<dependency>
+  		<groupId>org.apache.poi</groupId>
+  		<artifactId>poi-ooxml</artifactId>
+  		<version>3.9</version>
+	</dependency>
+
+	<dependency>
+	  <groupId>org.apache.poi</groupId>
+	  <artifactId>poi-ooxml-schemas</artifactId>
+	  <version>3.9</version>
+	</dependency>
+</pre>
+
+<pre class="brush:java:nocontrols:nogutter">
+package com.synnex.learn.utils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFRichTextString;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+
+public class ExcellUtil {
+	
+	public static List&gt; readExcel(File file) {
+        List&gt; list = new ArrayList&lt;&gt;();
+        FileInputStream inputStream = null;
+        Workbook workbook = null;
+		try{
+			inputStream = new FileInputStream(file);
+			if(file.getName().endsWith(".xls")){
+				workbook = new HSSFWorkbook(inputStream);
+			}else if(file.getName().endsWith(".xlsx")){
+				workbook = new XSSFWorkbook(inputStream);
+			}
+			
+			Sheet sheet = workbook.getSheetAt(0);
+			
+			Row headerRow = sheet.getRow(0);
+			for(int j=1;j<=sheet.getLastRowNum();j++) {
+				Map<String,String> contentMap = new HashMap<>();
+				contentMap.put("rownum", j+"");
+				Row row = sheet.getRow(j);
+				DateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+				DateFormat formater2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				for(int i=0;i<row.getLastCellNum();i++) {
+					Cell cell = row.getCell(i);
+					if(cell != null){
+						String title = headerRow.getCell(cell.getColumnIndex()).getStringCellValue();
+						if(Cell.CELL_TYPE_NUMERIC == cell.getCellType() && DateUtil.isCellDateFormatted(cell)){
+							 short format = cell.getCellStyle().getDataFormat();  
+							if(format == 14){ //yyyy-MM-dd
+								Date date = cell.getDateCellValue();
+								contentMap.put(title,formater.format(date));
+							}else if(format == 22) { //yyyy-MM-dd HH:mm:ss
+								Date date = cell.getDateCellValue();
+								contentMap.put(title,formater2.format(date));
+							}
+							
+						}else{
+							cell.setCellType(Cell.CELL_TYPE_STRING);
+							contentMap.put(title,cell.getRichStringCellValue().getString());	
+						}
+						
+					}
+				}
+				list.add(contentMap);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally {
+			try {
+				inputStream.close();
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
+	
+	public static boolean writeDataToFile(XSSFWorkbook hssfWorkbook,String saveName){
+		boolean result = true;
+		FileOutputStream outputStream = null;
+		try {
+			File file = new File(saveName);
+			if(!file.getParentFile().exists()){
+				file.getParentFile().mkdirs();
+			}
+			if(!file.exists()){
+				try {
+					boolean b = file.createNewFile();
+					if(b == false){
+						return false;
+					}
+				} catch (IOException e) {
+					return false;
+				}
+			}
+		    outputStream = new FileOutputStream(file);
+		    hssfWorkbook.write(outputStream);
+		    outputStream.flush();
+		    System.out.println("query success,result write to:"+saveName);
+		} catch (FileNotFoundException e) {
+			result = false;
+		} catch (IOException e) {
+			result = false;
+		} finally {
+			 try {
+				 if(outputStream != null){
+					 outputStream.close();
+				 }
+			} catch (IOException e) {
+				result = false;
+			}
+		}
+		return result;
+	}
+	
+	public static XSSFWorkbook buildExcel(List<String> headList, List<List<String>> resultList){
+			int resultSize = resultList.size();
+			int size = 30000;
+			int sheetNum = resultSize/size;
+			int restRow = resultSize%size;
+			XSSFWorkbook hssfWorkbook = new XSSFWorkbook();
+			for(int x=0;x<sheetNum;x++){
+				XSSFSheet sheet = hssfWorkbook.createSheet("sheet"+x);
+				XSSFRow headerRow = sheet.createRow((short)0);
+				for(int i=0;i<headList.size();i++){
+					headerRow.createCell(i).setCellValue(new XSSFRichTextString(headList.get(i))); 
+				}
+				for(int i=1;i<=size;i++){
+					XSSFRow normalRow = sheet.createRow((short)(i));
+					List<String> list = resultList.get((x*size+i)-1);
+					for(int j=0;j<list.size();j++){
+						normalRow.createCell(j).setCellValue(new XSSFRichTextString(list.get(j)));
+					}
+				}
+			}
+			if(restRow > 0){
+				XSSFSheet sheet = hssfWorkbook.createSheet("sheet"+(sheetNum+1));
+				XSSFRow headerRow = sheet.createRow((short)0);
+				for(int i=0;i<headList.size();i++){
+					headerRow.createCell(i).setCellValue(new XSSFRichTextString(headList.get(i))); 
+				}
+				for(int i=0;i<restRow;i++){
+					XSSFRow  normalRow = sheet.createRow((short)(i+1));
+					List<String> list = null;
+				
+					list = resultList.get(sheetNum*size+i);
+					
+					for(int j=0;j<list.size();j++){
+						normalRow.createCell(j).setCellValue(new XSSFRichTextString(list.get(j)));
+					}
+				}
+			}
+			return hssfWorkbook;
+	}
+	
+	public static void main(String[] args) {
+		List<String> headList = new ArrayList<>();
+		List<List<String>> resultList = new ArrayList<>();
+		for(int i=0;i<10;i++){
+			headList.add(i+"-H");
+			List<String> list = new ArrayList<>();
+			for(int j=0;j<10;j++){
+				list.add(i+"-C");
+			}
+			
+			resultList.add(list);
+		}
+		
+		writeDataToFile(buildExcel(headList, resultList),"D://test/new.xlsx");
+	}
+}
+
 </pre>
 </body>
-<script type="text/javascript">  
-    SyntaxHighlighter.all();  
+<script type="text/javascript"> 
+	$(document).ready(function(){
+		
+		/*$("pre").each(function(){
+			var text = $(this).text();
+			htmlcontent = unhtml(text);
+			$(this).text(htmlcontent);
+		});*/
+		SyntaxHighlighter.autoloader(
+				['js','jscript','javascript','syntaxhighlighter_3.0.83/scripts/shBrushJScript.js'],
+				['bash','shell','syntaxhighlighter_3.0.83/scripts/shBrushBash.js'],
+				['css','syntaxhighlighter_3.0.83/scripts/shBrushCss.js'],
+				['xml','html','syntaxhighlighter_3.0.83/scripts/shBrushXml.js'],
+				['sql','syntaxhighlighter_3.0.83/scripts/shBrushSql.js'],
+				['php','syntaxhighlighter_3.0.83/scripts/shBrushPhp.js'],
+				['java','syntaxhighlighter_3.0.83/scripts/shBrushJava.js']
+			); 
+		SyntaxHighlighter.all(); 
+	});
+	
+	function unhtml(str) {
+         return str ? str.replace(/[<>]/g, (a) => {
+             return {
+                 '<': '&lt;',
+                '>': '&gt;'
+            }[a]
+        }) : '';
+    };
 </script
 </html>

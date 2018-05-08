@@ -1,0 +1,120 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shCore.css">  
+<link rel="stylesheet" type="text/css" href="syntaxhighlighter_3.0.83/styles/shThemeDefault.css">  
+
+<link rel="stylesheet" href="aui/css/aui.min.css" media="all">
+<link rel="stylesheet" href="aui/css/aui-experimental.min.css" media="all">
+
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>  
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJava.js"></script> 
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushXml.js"></script> 
+<script type="text/javascript" src="common/jquery.min.js"></script> 
+<script src="aui/js/aui.min.js"></script>
+<script src="aui/js/aui-experimental.min.js"></script>
+<script src="aui/js/aui-soy.min.js"></script>
+<script src="aui/js/aui-datepicker.min.js"></script>
+</head>
+<style>
+body { 
+font: normal 11px auto "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; 
+color: #4f6b72; 
+background: #E6EAE9; 
+}
+
+#mytable { 
+width: 100%; 
+padding: 0; 
+margin: 0; 
+word-wrap: break-word; word-break: break-all;
+} 
+
+th { 
+font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; 
+color: #4f6b72; 
+border-right: 1px solid #C1DAD7; 
+border-bottom: 1px solid #C1DAD7; 
+border-top: 1px solid #C1DAD7; 
+letter-spacing: 2px; 
+text-transform: uppercase; 
+text-align: left; 
+padding: 6px 6px 6px 12px; 
+background-color: #CAE8EA; 
+}
+
+td { 
+border-right: 1px solid #C1DAD7; 
+border-bottom: 1px solid #C1DAD7; 
+background: #fff; 
+font-size:11px; 
+padding: 6px 6px 6px 12px; 
+color: #4f6b72; 
+}
+
+.w1{
+width:10%;
+}
+
+.w2{
+width:20%;
+}
+
+.w3{
+width:50%;
+}
+
+.w4{
+width:20%;
+}
+</style>
+<body>
+<table id="mytable" cellspacing="0">
+<thead>
+<th class="w1">元素类型</th>
+<th class="w2">展示</th>
+<th class="w3">元素代码</th>
+<th class="w4">注释</th>
+</thead>
+
+
+<tr>
+<td class="w1">按钮</td>
+<td class="w2">
+<button class="aui-button aui-button-primary">Button</button>
+<button class="aui-button">Button</button>
+</td>
+<td class="w3">
+<pre class="brush:xml:nocontrols:collapse:showcolumns;toolbar:false;">
+<button class="aui-button aui-button-primary">Button</button>
+<button class="aui-button">Button</button>
+</pre>
+</td>
+<td class="w4">
+</td>
+</tr>
+
+<tr>
+<td class="w1">按钮</td>
+<td class="w2">
+<aui-toggle label="toggle button" id="my-toggle"></aui-toggle>
+</td>
+<td class="w3">
+<pre class="brush:xml:nocontrols:collapse:showcolumns;toolbar:false;">
+'<aui-toggle label="toggle button" id="my-toggle"></aui-toggle>'
+</pre>
+</td>
+<td class="w4">
+</td>
+</tr>
+
+
+</table>
+</body>
+<script>  
+    $(function(){
+		SyntaxHighlighter.all();  
+	});
+</script
+</html>
